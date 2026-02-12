@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Blog</title>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <div style="background-color: #333; padding: 10px;">
+        <a href="/" style="color:white; margin-right:15px;">Home</a>
+
+        {% if user.is_authenticated %}
+            <a href="/create/" style="color:white; margin-right:15px;">Create Post</a>
+            <span style="color:white;">Welcome, {{ user.username }}</span>
+
+            <form action="/logout/" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        {% else %}
+            <a href="/login/" style="color:white; margin-right:15px;">Login</a>
+            <a href="/signup/" style="color:white;">Sign Up</a>
+        {% endif %}
+    </div>
+
+    <hr>
+
+    <!-- Page Content Goes Here -->
+    {% block content %}
+    {% endblock %}
+
+</body>
+</html>

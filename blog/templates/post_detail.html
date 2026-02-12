@@ -1,22 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ post.title }}</title>
-</head>
-<body>
-    <h1>{{ post.title }}</h1>
-    <p>{{ post.content }}</p>
-    <small>{{ post.created_at }}</small>
+{% extends 'base.html' %}
 
-    <br><br>
-    {% if user == post.author %}
+{% block content %}
+
+<h1>{{ post.title }}</h1>
+
+<p>{{ post.content }}</p>
+<p><strong>Author:</strong> {{ post.author.username }}</p>
+<p><small>{{ post.created_at }}</small></p>
+
+{% if user == post.author %}
     <a href="/edit/{{ post.id }}/">Edit</a>
-    <br>
+    |
     <a href="/delete/{{ post.id }}/">Delete</a>
-    {% endif %}
+{% endif %}
 
-
-    <br><br>
-    <a href="/">Back to home</a>
-</body>
-</html>
+{% endblock %}
