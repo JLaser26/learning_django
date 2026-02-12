@@ -9,9 +9,12 @@
     <small>{{ post.created_at }}</small>
 
     <br><br>
+    {% if user == post.author %}
     <a href="/edit/{{ post.id }}/">Edit</a>
     <br>
     <a href="/delete/{{ post.id }}/">Delete</a>
+    {% endif %}
+
 
     <br><br>
     <a href="/">Back to home</a>

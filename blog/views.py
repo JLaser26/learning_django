@@ -17,16 +17,22 @@ def create_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
-            form.save()
+            post = form.save(commit=False)
+            post.author = request.user   # 👈 important line
+            post.save()
             return redirect('/')
     else:
         form = PostForm()
 
     return render(request, 'create_post.html', {'form': form})
 
+
 @login_required
 def edit_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
+
+    if post.author != request.user:
+        return redirect('/')  # block access
 
     if request.method == 'POST':
         form = PostForm(request.POST, instance=post)
@@ -38,8 +44,14 @@ def edit_post(request, post_id):
 
     return render(request, 'create_post.html', {'form': form})
 
+
 @login_required
 def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
+
+    if post.author != request.user:
+        return redirect('/')  # block access
+
     post.delete()
     return redirect('/')
+
