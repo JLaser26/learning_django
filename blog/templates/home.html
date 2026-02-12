@@ -26,8 +26,29 @@
             <small>{{ post.created_at }}</small>
         </p>
     </div>
+
+
 {% empty %}
     <p>No posts yet. Be the first to create one!</p>
 {% endfor %}
+
+<div style="text-align:center; margin-top:20px;">
+
+    {% if posts.has_previous %}
+        <a href="?page=1">First</a>
+        <a href="?page={{ posts.previous_page_number }}">Previous</a>
+    {% endif %}
+
+    <span>
+        Page {{ posts.number }} of {{ posts.paginator.num_pages }}
+    </span>
+
+    {% if posts.has_next %}
+        <a href="?page={{ posts.next_page_number }}">Next</a>
+        <a href="?page={{ posts.paginator.num_pages }}">Last</a>
+    {% endif %}
+
+</div>
+
 
 {% endblock %}

@@ -5,10 +5,17 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 
 def home(request):
-    posts = Post.objects.all()
+    post_list = Post.objects.all().order_by('-created_at')
+    paginator = Paginator(post_list, 5)  # 5 posts per page
+
+    page_number = request.GET.get('page')
+    posts = paginator.get_page(page_number)
+
     return render(request, 'home.html', {'posts': posts})
+
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
