@@ -17,9 +17,29 @@ def home(request):
     return render(request, 'home.html', {'posts': posts})
 
 
+from .forms import CommentForm
+
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    return render(request, 'post_detail.html', {'post': post})
+    comments = post.comments.all().order_by('-created_at')
+
+    if request.method == 'POST' and request.user.is_authenticated:
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+            return redirect(f'/post/{post.id}/')
+    else:
+        form = CommentForm()
+
+    return render(request, 'post_detail.html', {
+        'post': post,
+        'comments': comments,
+        'form': form
+    })
+
 
 def signup(request):
     if request.method == 'POST':
